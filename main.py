@@ -45,6 +45,7 @@ async def load_and_store_pdf_files(files: List[UploadFile]) -> dict[str, str]:
         shutil.move(new_file_src, store_new_file_at_dist)
 
     return {
+        'status': 200,
         "message": "Files uploaded and stored successfully",
     }
 
@@ -54,6 +55,7 @@ async def vectorize_pdfs():
     status = store_data_in_chromadb()
     if status:
         return {
+            'status': 200,
             "message": "Vectorization is Done, You can now Meet HKLegalBuddy – Your Friendly Guide to Hong Kong Law! "
         }
 
