@@ -1,0 +1,200 @@
+@font-face {
+    font-family: klein;
+    src: url("../static/klein/KleinText-Regular.woff2");
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: klein;
+}
+
+:root {
+    --app-color: 93, 63, 106;
+}
+
+body {
+    background: white;
+}
+
+#app {
+    width: 100vw;
+    height: 100vh;
+    background: white;
+    padding: 20px 0;
+    display: flex;
+    justify-content: center;
+}
+
+.app_wrapper {
+    width: 100%;
+    max-width: 1280px;
+    padding: 0 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.heading {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.heading img {
+    width: 150px;
+    height: auto;
+    object-fit: contain;
+}
+
+#chat_container {
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    margin-bottom: 20px;
+    scroll-behavior: smooth;
+    border-radius: 6px;
+    box-shadow: 0px 3px 15px 0px #60617124;
+    padding: 10px 10px;
+}
+
+.message_wrapper {
+    width: fit-content;
+    border-radius: 6px;
+    padding: 15px;
+}
+
+.message_wrapper.user {
+    background-color: rgba(var(--app-color), 0.11);
+    margin-right: 15%;
+    border-radius: 30px 30px 30px 0;
+    align-self: flex-start;
+}
+
+.message_wrapper.ai {
+    background-color: rgba(var(--app-color), 0.71);
+    margin-left: 15%;
+    border-radius: 30px 30px 0 30px;
+    align-self: flex-end;
+}
+
+
+.chat {
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.profile {
+    width: 36px;
+    height: 36px;
+    border-radius: 5px;
+    background: rgb(var(--app-color));
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.ai .profile {
+    background: transparent;
+}
+
+.ai .profile img {
+    width: 100%;
+    height: 100%;
+}
+
+.profile img {
+    width: 60%;
+    height: 60%;
+    object-fit: contain;
+}
+
+.message {
+    flex: 1;
+    color: black;
+    font-size: 20px;
+    max-width: 100%;
+    white-space: pre-wrap;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    margin: auto;
+}
+
+/* hides scrollbar */
+.message::-webkit-scrollbar {
+    display: none;
+}
+
+form {
+    width: 100%;
+    margin: 0 auto;
+    padding: 5px;
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+form>div {
+    flex: 1;
+    border: 2px solid rgb(var(--app-color));
+    border-radius: 20px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+textarea {
+    width: calc(100% - 10px);
+    color: black;
+    font-size: 18px;
+    max-height: 200px;
+    padding: 10px;
+    background: transparent;
+    border-radius: 5px;
+    border: 0;
+    overflow-y: auto;
+    outline: none;
+    resize: none;
+    border-radius: 20px;
+}
+
+*::-webkit-scrollbar {
+    width: 5px;
+}
+
+*::-webkit-scrollbar-thumb {
+    width: 5px;
+    border-radius: 10px;
+    background-color: rgb(117, 117, 117);
+}
+
+
+button {
+    outline: 0;
+    border: 0;
+    cursor: pointer;
+    background: transparent;
+}
+
+form img {
+    width: 30px;
+    height: 30px;
+}
