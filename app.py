@@ -1,6 +1,6 @@
 import os
 from flask import Flask, Response
-from chroma_with_QA import qa_chain
+from retrieve_QA import qa_chain
 
 app = Flask(__name__)
 app.config.from_object(__name__)
