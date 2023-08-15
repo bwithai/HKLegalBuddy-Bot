@@ -5,9 +5,10 @@ from langchain.vectorstores import Pinecone
 import pinecone
 from langchain.document_loaders import DirectoryLoader
 
+pinecone_api_key = os.environ['PIN_CONE_API_KEY']
 
 pinecone.init(
-    api_key=os.environ['PIN_CONE_API_KEY'],
+    api_key=pinecone_api_key,
     environment='asia-southeast1-gcp-free'
 )
 loader = DirectoryLoader("/Users/saeedanwar/Desktop/upwork_projects/pakistan duabi school /v2/data")
