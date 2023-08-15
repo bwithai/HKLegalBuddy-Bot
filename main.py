@@ -66,9 +66,29 @@ async def request_query(response: QueryResponse):
     sources = process_llm_response(llm_response)
 
     result: dict[str, str | Any] = {
+        'status': 200,
         "query": llm_response["query"],
         "result": llm_response["result"],
     }
 
     print(result)
     return result
+
+@app.delete("/api/v1/delete-test-data")
+async def delete_test_data():
+    status = False
+    dist_path = os.path.join(os.getcwd(), 'pdf')
+    if os.path.exists(dist_path):
+        shutil.rmtree(dist_path)
+        status = True
+    else:
+        return {
+            "status": 101,
+            "message": "pdf directory not found"
+        }
+
+    if status:
+        return {
+            "status": 200,
+            "message": "pdf directory removed"
+        }
