@@ -4,8 +4,8 @@ from starlette.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from backend.core import run_llm
 
-# from dotenv import load_dotenv
-# load_dotenv()
+from dotenv import load_dotenv
+load_dotenv()
 
 
 app = FastAPI()

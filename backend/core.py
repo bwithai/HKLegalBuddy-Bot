@@ -4,6 +4,8 @@ from langchain.chat_models import ChatOpenAI
 from langchain.chains import RetrievalQA
 from langchain.vectorstores import Pinecone
 import pinecone
+from dotenv import load_dotenv
+load_dotenv()
 
 pinecone.init(
     api_key=os.environ['PIN_CONE_API_KEY'],
