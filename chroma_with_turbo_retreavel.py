@@ -1,6 +1,6 @@
 import os
 
-os.environ["OPENAI_API_KEY"] = "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"
+api_key = os.environ["OPENAI_API_KEY"]
 
 from langchain.vectorstores import Chroma
 from langchain.embeddings import OpenAIEmbeddings
@@ -9,7 +9,7 @@ from langchain.chat_models import ChatOpenAI
 from langchain.chains import RetrievalQA
 
 persist_directory = 'db'
-embedding = OpenAIEmbeddings()
+embedding = OpenAIEmbeddings(api_key=api_key)
 
 vectordb2 = Chroma(persist_directory=persist_directory,
                    embedding_function=embedding,
