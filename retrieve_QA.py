@@ -4,7 +4,6 @@ from langchain import OpenAI, PromptTemplate
 from langchain.chains import RetrievalQA
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.vectorstores import Chroma
-
 api_key = os.environ['OPENAI_API_KEY']
 persist_directory = 'db'
 
@@ -15,7 +14,7 @@ vectordb = Chroma(persist_directory=persist_directory,
                   embedding_function=embedding)
 
 # retriever = vectordb.as_retriever()
-retriever = vectordb.as_retriever(search_kwargs={"k": 1})
+retriever = vectordb.as_retriever(search_kwargs={"k": 2})
 
 # Pass in a custom prompt to RetrievalQA that includes a context section:
 template = """/ 
@@ -58,7 +57,7 @@ def process_llm_response(llm_response):
 #     sources = process_llm_response(llm_response)
 #     # Create the formatted result string
 #     formatted_result = "{}\n\nSources:\n{}".format(llm_response['result'], '\n'.join(sources))
-#
+# #
 #     result = {
 #         'query': llm_response['query'],
 #         'result': formatted_result

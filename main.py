@@ -64,15 +64,18 @@ async def vectorize_pdfs():
 async def request_query(response: QueryResponse):
     llm_response = qa_chain(response.query)
     sources = process_llm_response(llm_response)
+    # Create the formatted result string
+    formatted_result = "{}\n\nSources:\n{}".format(llm_response['result'], '\n'.join(sources))
 
     result: dict[str, str | Any] = {
         'status': 200,
         "query": llm_response["query"],
-        "result": llm_response["result"],
+        "result": formatted_result,
     }
 
     print(result)
     return result
+
 
 @app.delete("/api/v1/delete-test-data")
 async def delete_test_data():

@@ -3,7 +3,7 @@ import os
 from langchain.vectorstores import Chroma
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.document_loaders import PyPDFDirectoryLoader
+from langchain.document_loaders import DirectoryLoader
 # from dotenv import load_dotenv
 # load_dotenv()
 
@@ -13,7 +13,7 @@ api_key = os.environ['OPENAI_API_KEY']
 def store_data_in_chromadb():
     # Load and process the text files
     # loader = PyPDFLoader('Avori project data.pdf')
-    loader = PyPDFDirectoryLoader('pdf/')
+    loader = DirectoryLoader('pdf/')
 
     documents = loader.load()
 
