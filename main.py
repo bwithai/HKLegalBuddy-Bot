@@ -5,7 +5,7 @@ from typing import List, Any
 from fastapi import FastAPI, UploadFile
 from starlette.middleware.cors import CORSMiddleware
 from store_data_into_chroma_db import store_data_in_chromadb
-from retrieve_QA import qa_chain, process_llm_response
+from retrieve_QA import qa_chain, chat_history
 from schemas import QueryResponse
 
 # app
@@ -62,19 +62,9 @@ async def vectorize_pdfs():
 
 @app.post("/api/v1/query")
 async def request_query(response: QueryResponse):
-    llm_response = qa_chain(response.query)
-    sources = process_llm_response(llm_response)
-    # Create the formatted result string
-    formatted_result = "{}\n\nSources:\n{}".format(llm_response['result'], '\n'.join(sources))
-
-    result: dict[str, str | Any] = {
-        'status': 200,
-        "query": llm_response["query"],
-        "result": formatted_result,
-    }
-
-    print(result)
-    return result
+    result = qa_chain({"question": response.query, "chat_history": chat_history})
+    print(result['answer'])
+    return result['answer']
 
 
 @app.delete("/api/v1/delete-test-data")
