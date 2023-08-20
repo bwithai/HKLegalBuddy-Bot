@@ -1,9 +1,14 @@
 import os
 
-from langchain import OpenAI, PromptTemplate
-from langchain.chains import RetrievalQA
+from langchain import LLMChain
+from langchain.chains.chat_vector_db.prompts import CONDENSE_QUESTION_PROMPT
+from langchain.chains.qa_with_sources import load_qa_with_sources_chain
+from langchain.chat_models import ChatOpenAI
+from langchain.chains import ConversationalRetrievalChain
 from langchain.embeddings import OpenAIEmbeddings
+from langchain.memory import ConversationBufferMemory
 from langchain.vectorstores import Chroma
+
 api_key = os.environ['OPENAI_API_KEY']
 persist_directory = 'db'
 
@@ -13,32 +18,32 @@ embedding = OpenAIEmbeddings(api_key=api_key)
 vectordb = Chroma(persist_directory=persist_directory,
                   embedding_function=embedding)
 
+memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
+
 # retriever = vectordb.as_retriever()
-retriever = vectordb.as_retriever(search_kwargs={"k": 2})
+retriever = vectordb.as_retriever()
 
-# Pass in a custom prompt to RetrievalQA that includes a context section:
-template = """/ 
-{context}: You are a legal assistant who is very knowledgeable the laws in Hong Kong. You will be 
-answering questions from Hong Kong citizens about their legal problems. The questions you receive will span from 
-different legal areas such as, but limited to, work injury, road accident claim, divorce, criminal,etc. As a chatbot, 
-your main objective is to assist users by generating answers based on the laws and past cases of Hong Kong. Your 
-answer must be accurate and simple to understand. Do not use too many legal jargons that normal citizens might find 
-it hard to comprehend. Talk to the user with the language he or she is using. Whenever you are not 100% sure about 
-your answer or you don't know how to answer, advise the user to contact a real lawyer for consultation.
+llm = ChatOpenAI(temperature=0, model='gpt-3.5-turbo')
 
-Question: {question}
-
-Answer: 
-"""
-
-PROMPT = PromptTemplate(template=template, input_variables=["context", 'question'])
+question_generator = LLMChain(llm=llm, prompt=CONDENSE_QUESTION_PROMPT)
+doc_chain = load_qa_with_sources_chain(llm, chain_type="map_reduce")
 
 # create the chain to answer questions
-qa_chain = RetrievalQA.from_chain_type(llm=OpenAI(openai_api_key=api_key),
-                                       chain_type="stuff",
-                                       retriever=retriever,
-                                       chain_type_kwargs={"prompt": PROMPT},
-                                       return_source_documents=True)
+qa_chain = ConversationalRetrievalChain(retriever=retriever,
+                                        question_generator=question_generator,
+                                        combine_docs_chain=doc_chain,
+                                        )
+
+# User interactions and queries
+chat_history = []
+
+
+# # create the chain to answer questions
+# qa_chain = RetrievalQA.from_chain_type(llm=OpenAI(openai_api_key=api_key),
+#                                        chain_type="stuff",
+#                                        retriever=retriever,
+#                                        chain_type_kwargs={"prompt": PROMPT},
+#                                        return_source_documents=True)
 
 
 # Cite sources
@@ -53,13 +58,7 @@ def process_llm_response(llm_response):
 # full example
 # while True:
 #     query = str(input("Enter Query : "))
-#     llm_response = qa_chain(query)
-#     sources = process_llm_response(llm_response)
-#     # Create the formatted result string
-#     formatted_result = "{}\n\nSources:\n{}".format(llm_response['result'], '\n'.join(sources))
-# #
-#     result = {
-#         'query': llm_response['query'],
-#         'result': formatted_result
-#     }
-#     print(result['result'])
+#     print("after result result")
+#     # Query the qa_chain
+#     result = qa_chain({"question": query, "chat_history": chat_history})
+#     print(result['answer'])
