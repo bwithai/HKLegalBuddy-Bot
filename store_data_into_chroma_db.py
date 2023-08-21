@@ -4,6 +4,7 @@ from langchain.vectorstores import Chroma
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.document_loaders import PyPDFDirectoryLoader
+from tenacity import retry, wait_random_exponential
 
 # from dotenv import load_dotenv
 # load_dotenv()
@@ -11,6 +12,7 @@ from langchain.document_loaders import PyPDFDirectoryLoader
 api_key = os.environ['OPENAI_API_KEY']
 
 
+@retry(wait=wait_random_exponential(multiplier=1, max=60))  # Adjust the max value as needed
 def store_data_in_chromadb():
     # Load and process the text files
     # loader = PyPDFLoader('Avori project data.pdf')
@@ -37,8 +39,7 @@ def store_data_in_chromadb():
 
     vectordb = Chroma.from_documents(documents=texts,
                                      embedding=embedding,
-                                     persist_directory=persist_directory,
-                                     ids=ids
+                                     persist_directory=persist_directory
                                      )
 
     # persist the db to disk

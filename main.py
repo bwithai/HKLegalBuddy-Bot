@@ -50,9 +50,24 @@ async def load_and_store_pdf_files(files: List[UploadFile]) -> dict[str, str]:
     }
 
 
+@app.get("/api/v1/list-pdf-files")
+async def list_pdf_files() -> List[str]:
+    pdf_directory = 'pdf/'
+
+    # List all files in the directory and filter PDF files
+    pdf_files = [filename for filename in os.listdir(pdf_directory) if filename.endswith('.pdf')]
+
+    return pdf_files
+
+
 @app.get("/api/v1/vectorize-pdfs")
 async def vectorize_pdfs():
-    status = store_data_in_chromadb()
+    try:
+        status = store_data_in_chromadb()
+    except Exception as e:
+        return {
+            "message": f"An error occurred: {e}"
+        }
     if status:
         return {
             'status': 200,
