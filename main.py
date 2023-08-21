@@ -62,17 +62,25 @@ async def list_pdf_files() -> List[str]:
 
 @app.get("/api/v1/vectorize-pdfs")
 async def vectorize_pdfs():
-    try:
-        status = store_data_in_chromadb()
-    except Exception as e:
-        return {
-            "message": f"An error occurred: {e}"
-        }
-    if status:
-        return {
-            'status': 200,
-            "message": "Vectorization is Done, You can now Meet HKLegalBuddy – Your Friendly Guide to Hong Kong Law! "
-        }
+    pdf_directory = 'pdf/'
+
+    # List all files in the directory and filter PDF files
+    pdf_files = [filename for filename in os.listdir(pdf_directory) if filename.endswith('.pdf')]
+
+    for pdf_file in pdf_files:
+        pdf_file_path = os.path.join(pdf_directory, pdf_file)
+
+        try:
+            store_data_in_chromadb(pdf_file_path)
+        except Exception as e:
+            return {
+                "message": f"An error occurred: {e}"
+            }
+
+    return {
+        'status': 200,
+        "message": "Vectorization is Done, You can now Meet HKLegalBuddy – Your Friendly Guide to Hong Kong Law! "
+    }
 
 
 @app.post("/api/v1/query")

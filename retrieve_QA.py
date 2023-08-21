@@ -8,11 +8,12 @@ from langchain.chains import ConversationalRetrievalChain
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.memory import ConversationBufferMemory
 from langchain.vectorstores import Chroma
+import openai
 
-api_key = os.environ['OPENAI_API_KEY']
+openai.api_key = os.environ['OPENAI_API_KEY']
 persist_directory = 'db'
 
-embedding = OpenAIEmbeddings(api_key=api_key)
+embedding = OpenAIEmbeddings()
 
 # Now we can load the persisted database from disk, and use it as normal.
 vectordb = Chroma(persist_directory=persist_directory,
