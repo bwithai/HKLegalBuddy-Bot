@@ -92,7 +92,11 @@ async def vectorize_pdfs():
 async def request_query(response: QueryResponse):
     result = qa_chain({"question": response.query, "chat_history": chat_history})
     print(result['answer'])
-    return result['answer']
+    return {
+        "status": 200,
+        "query": response.query,
+        "result": result['answer']
+    }
 
 
 @app.delete("/api/v1/delete-test-data")
