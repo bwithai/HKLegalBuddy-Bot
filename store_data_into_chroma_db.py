@@ -6,8 +6,8 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.document_loaders import PyPDFDirectoryLoader, DirectoryLoader, PyPDFLoader
 import openai
 
-from dotenv import load_dotenv
-load_dotenv()
+# from dotenv import load_dotenv
+# load_dotenv()
 
 openai.api_key = os.environ['OPENAI_API_KEY']
 
@@ -35,6 +35,7 @@ def store_data_in_chromadb(file_path):
 
     print("Length of texts:", len(texts))
     print("Length of ids:", len(ids))
+    print(file_path, "is added to db")
 
     vectordb = Chroma.from_documents(documents=texts,
                                      embedding=embedding,

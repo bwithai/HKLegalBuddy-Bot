@@ -1,6 +1,6 @@
 import os
 import shutil
-from typing import List, Any
+from typing import List, Any, Dict
 
 from fastapi import FastAPI, UploadFile
 from starlette.middleware.cors import CORSMiddleware
@@ -51,8 +51,13 @@ async def load_and_store_pdf_files(files: List[UploadFile]) -> dict[str, str]:
 
 
 @app.get("/api/v1/list-pdf-files")
-async def list_pdf_files() -> List[str]:
+async def list_pdf_files() -> dict[str, str] | list[str]:
     pdf_directory = 'pdf/'
+    dist_path = os.path.join(os.getcwd(), pdf_directory)
+    if not os.path.exists(dist_path):
+        return {
+            "message": "pdf directory is not found"
+        }
 
     # List all files in the directory and filter PDF files
     pdf_files = [filename for filename in os.listdir(pdf_directory) if filename.endswith('.pdf')]
