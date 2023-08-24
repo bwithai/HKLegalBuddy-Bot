@@ -46,4 +46,3 @@ def store_data_in_chromadb(file_path):
     # persist the db to disk
     vectordb.persist()
     vectordb = None
-    return True

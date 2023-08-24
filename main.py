@@ -69,6 +69,12 @@ async def list_pdf_files() -> dict[str, str] | list[str]:
 async def vectorize_pdfs():
     pdf_directory = 'pdf/'
 
+    dist_path = os.path.join(os.getcwd(), pdf_directory)
+    if not os.path.exists(dist_path):
+        return {
+            "message": "upload pdf first"
+        }
+
     # List all files in the directory and filter PDF files
     pdf_files = [filename for filename in os.listdir(pdf_directory) if filename.endswith('.pdf')]
 
