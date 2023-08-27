@@ -25,7 +25,6 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.vectorstores import Chroma
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.docstore.document import Document
-from constants import CHROMA_SETTINGS
 
 from dotenv import load_dotenv
 
