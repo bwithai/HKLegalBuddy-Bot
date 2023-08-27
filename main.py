@@ -54,7 +54,7 @@ async def load_and_store_pdf_files(files: List[UploadFile]) -> dict[str, str]:
 
 
 @app.get("/api/v1/list-pdf-files")
-async def list_pdf_files() -> dict[str, list[str] | int]:
+async def list_pdf_files():
     pdf_directory = 'pdf/'
     dist_path = os.path.join(os.getcwd(), pdf_directory)
     if not os.path.exists(dist_path):
