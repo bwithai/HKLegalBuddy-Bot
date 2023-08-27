@@ -109,7 +109,7 @@ async def request_query(response: QueryResponse):
     end = time.time()
 
     # Prepare the response string
-    response_string = f"\n\n> Answer (took {round(end - start, 2)} s.):\n\n{answer}"
+    response_string = f"> Answer (took {round(end - start, 2)} s.):\n\n{answer}"
 
     # Add the relevant sources used for the answer
     if include_resources:
