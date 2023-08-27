@@ -28,7 +28,10 @@ app.add_middleware(
 @app.post("/api/v1/load-and-store")
 async def load_and_store_pdf_files(files: List[UploadFile]) -> dict[str, str]:
     if not files:
-        return {"message": "No upload file sent"}
+        return {
+            "status": 400,
+            "result": "No upload file sent"
+        }
 
     dist_path = os.path.join(os.getcwd(), 'pdf')
     if not os.path.exists(dist_path):
@@ -46,23 +49,27 @@ async def load_and_store_pdf_files(files: List[UploadFile]) -> dict[str, str]:
 
     return {
         'status': 200,
-        "message": "Files uploaded and stored successfully",
+        "result": "Files uploaded and stored successfully",
     }
 
 
 @app.get("/api/v1/list-pdf-files")
-async def list_pdf_files() -> dict[str, str] | list[str]:
+async def list_pdf_files() -> dict[str, list[str] | int]:
     pdf_directory = 'pdf/'
     dist_path = os.path.join(os.getcwd(), pdf_directory)
     if not os.path.exists(dist_path):
         return {
-            "message": "pdf directory is not found"
+            "status": 400,
+            "result": "pdf directory is not found"
         }
 
     # List all files in the directory and filter PDF files
     pdf_files = [filename for filename in os.listdir(pdf_directory) if filename.endswith('.pdf')]
 
-    return pdf_files
+    return {
+        "status": 200,
+        "result": pdf_files
+    }
 
 
 @app.get("/api/v1/vectorize-pdfs")
@@ -72,7 +79,8 @@ async def vectorize_pdfs():
     dist_path = os.path.join(os.getcwd(), pdf_directory)
     if not os.path.exists(dist_path):
         return {
-            "message": "upload pdf first"
+            "status": 400,
+            "result": "upload pdf first"
         }
 
     # List all files in the directory and filter PDF files
@@ -85,12 +93,13 @@ async def vectorize_pdfs():
             store_data_in_chromadb(pdf_file_path)
         except Exception as e:
             return {
-                "message": f"An error occurred: {e}"
+                "status": 500,
+                "result": f"An error occurred: {e}"
             }
 
     return {
         'status': 200,
-        "message": "Vectorization is Done, You can now Meet HKLegalBuddy – Your Friendly Guide to Hong Kong Law! "
+        "result": "Vectorization is Done, You can now Meet HKLegalBuddy – Your Friendly Guide to Hong Kong Law! "
     }
 
 
@@ -114,12 +123,12 @@ async def delete_test_data():
         status = True
     else:
         return {
-            "status": 101,
-            "message": "pdf directory not found"
+            "status": 400,
+            "result": "pdf directory not found"
         }
 
     if status:
         return {
             "status": 200,
-            "message": "pdf directory removed"
+            "result": "pdf directory removed"
         }
